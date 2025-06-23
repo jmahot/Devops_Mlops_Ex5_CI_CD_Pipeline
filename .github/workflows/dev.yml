@@ -1,0 +1,51 @@
+name: Dev Branch Pipeline
+
+on:
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies backend
+        run: npm install
+        working-directory: ./backend
+
+      - name: Lint backend
+        run: npm run lint
+        working-directory: ./backend
+
+      - name: Run audit backend
+        run: npm audit --production
+        working-directory: ./backend
+
+      - name: Install dependencies frontend
+        run: npm install
+        working-directory: ./frontend
+
+      - name: Lint frontend
+        run: npm run lint
+        working-directory: ./frontend
+
+      - name: Run audit frontend
+        run: npm audit --production
+        working-directory: ./frontend
+
+      - name: Run tests backend
+        run: npm test
+        working-directory: ./backend
+
+      - name: Run tests frontend
+        run: npm test
+        working-directory: ./frontend
+
+      - name: Build Docker images
+        run: docker compose build

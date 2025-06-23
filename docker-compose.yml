@@ -1,0 +1,13 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    image: tonuser/backend:latest
+    ports:
+      - "3001:3001"
+
+  frontend:
+    build: ./frontend
+    image: tonuser/frontend:latest
+    ports:
+      - "3000:3000"
